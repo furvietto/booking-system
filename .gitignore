@@ -1,0 +1,38 @@
+# Compiled class files
+*.class
+
+# Logs
+*.log
+
+# Build directories
+target/
+
+# Maven
+.mvn/
+!/.mvn/wrapper/maven-wrapper.jar
+
+# Eclipse files
+*.classpath
+*.project
+.settings/
+
+# IntelliJ IDEA files
+.idea/
+*.iml
+*.iws
+out/
+
+# OS generated
+.DS_Store
+Thumbs.db
+
+# Docker
+*.pid
+*.env
+
+# Git
+.git/
+
+# Misc
+*.bak
+*.swp

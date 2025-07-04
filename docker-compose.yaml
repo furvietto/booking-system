@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  eureka-server:
+    build: ./eureka-server
+    ports:
+      - "8761:8761"
+    networks:
+      - springnet
+
+  booking-service:
+    build: ./booking-service
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/bookingdb
+      - SPRING_DATASOURCE_USERNAME=bookinguser
+      - SPRING_DATASOURCE_PASSWORD=bookingpass
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+    depends_on:
+      - postgres
+      - eureka-server
+    networks:
+      - springnet
+
+  gateway-service:
+    build: ./gateway-service
+    ports:
+      - "8080:8080"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+    depends_on:
+      - eureka-server
+    networks:
+      - springnet
+
+  postgres:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_DB: bookingdb
+      POSTGRES_USER: bookinguser
+      POSTGRES_PASSWORD: bookingpass
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - springnet
+
+volumes:
+  pgdata:
+
+networks:
+  springnet:
